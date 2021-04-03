@@ -4,9 +4,10 @@
 // Author: Shuo Chen (chenshuo at chenshuo dot com)
 
 #include "muduo/base/CurrentThread.h"
-
+#ifdef __linux__
 #include <cxxabi.h>
 #include <execinfo.h>
+#endif//__linux__
 #include <stdlib.h>
 
 namespace muduo
@@ -22,6 +23,7 @@ static_assert(std::is_same<int, pid_t>::value, "pid_t should be int");
 string stackTrace(bool demangle)
 {
   string stack;
+#ifdef __linux__
   const int max_frames = 200;
   void* frame[max_frames];
   int nptrs = ::backtrace(frame, max_frames);
@@ -70,6 +72,33 @@ string stackTrace(bool demangle)
     free(demangled);
     free(strings);
   }
+#else
+  const int len = 200;
+  const int maxFunNameLen = 512;
+  void         * buffer[len];
+  HANDLE         process = GetCurrentProcess();
+
+  SymInitialize(process, nullptr, true);
+
+  int nptrs = CaptureStackBackTrace(0, len, buffer, nullptr);
+
+  SYMBOL_INFO  * symbol = (SYMBOL_INFO *)calloc(sizeof(SYMBOL_INFO) + maxFunNameLen * sizeof(char), 1);
+  symbol->MaxNameLen = maxFunNameLen;
+  symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+
+  if (symbol)
+  {
+      for (int i = 0; i < nptrs; ++i)
+      {
+          SymFromAddr(process, (DWORD64)(buffer[i]), 0, symbol);
+          char funstring[maxFunNameLen] = {};
+          sprintf_s(funstring, "%i: %s - 0x%I64X\n", nptrs - i - 1, symbol->Name, symbol->Address);
+          stack.append(funstring);
+      }
+      free(symbol);
+  }
+
+#endif// __linux__
   return stack;
 }
 

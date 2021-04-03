@@ -14,6 +14,7 @@
 #include "muduo/base/copyable.h"
 #include "muduo/base/StringPiece.h"
 #include "muduo/base/Types.h"
+#include "muduo/base/CrossPlatformAdapterFunction.h"
 
 #include "muduo/net/Endian.h"
 

@@ -12,7 +12,9 @@
 #include "muduo/net/SocketsOps.h"
 
 #include <errno.h>
+#ifdef __linux__
 #include <sys/uio.h>
+#endif//__linux__
 
 using namespace muduo;
 using namespace muduo::net;

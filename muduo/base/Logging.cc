@@ -190,7 +190,7 @@ Logger::Logger(SourceFile file, int line, LogLevel level)
 }
 
 Logger::Logger(SourceFile file, int line, bool toAbort)
-  : impl_(toAbort?FATAL:ERROR, errno, file, line)
+  : impl_(toAbort?FATAL:ERROR_, errno, file, line)
 {
 }
 

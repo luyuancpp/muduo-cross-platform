@@ -15,9 +15,11 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>  // snprintf
+#ifdef __linux__
 #include <sys/socket.h>
 #include <sys/uio.h>  // readv
 #include <unistd.h>
+#endif//__linux__
 
 using namespace muduo;
 using namespace muduo::net;
@@ -76,6 +78,7 @@ const struct sockaddr_in6* sockets::sockaddr_in6_cast(const struct sockaddr* add
 
 int sockets::createNonblockingOrDie(sa_family_t family)
 {
+#ifdef __linux__
 #if VALGRIND
   int sockfd = ::socket(family, SOCK_STREAM, IPPROTO_TCP);
   if (sockfd < 0)
@@ -91,6 +94,21 @@ int sockets::createNonblockingOrDie(sa_family_t family)
     LOG_SYSFATAL << "sockets::createNonblockingOrDie";
   }
 #endif
+#endif // __linux__
+#ifdef WIN32
+
+	int sockfd = (int)::WSASocket(family, SOCK_STREAM , IPPROTO_TCP, NULL, 0, 0);
+	if (sockfd < 0)
+	{
+		LOG_SYSFATAL << "sockets::createNonblockingOrDie";
+	}
+	u_long  mode = 1;
+	int result = ioctlsocket(sockfd, FIONBIO, &mode);
+	if (result != NO_ERROR)
+	{
+		LOG_SYSFATAL << "ioctlsocket failed with error: " << result;
+	}
+#endif // WIN32
   return sockfd;
 }
 
@@ -163,7 +181,12 @@ int sockets::connect(int sockfd, const struct sockaddr* addr)
 
 ssize_t sockets::read(int sockfd, void *buf, size_t count)
 {
+#ifdef __linux__
   return ::read(sockfd, buf, count);
+#endif // __linux__
+#ifdef WIN32
+  return ::winreadsock(sockfd, buf, count);
+#endif // WIN32
 }
 
 ssize_t sockets::readv(int sockfd, const struct iovec *iov, int iovcnt)
@@ -173,15 +196,29 @@ ssize_t sockets::readv(int sockfd, const struct iovec *iov, int iovcnt)
 
 ssize_t sockets::write(int sockfd, const void *buf, size_t count)
 {
-  return ::write(sockfd, buf, count);
+#ifdef __linux__
+	return ::write(sockfd, buf, count);
+#endif // __linux__
+#ifdef WIN32
+	return winwritesock(sockfd, buf, count);
+#endif // WIN32
+  
 }
 
 void sockets::close(int sockfd)
 {
+#ifdef __linux__
   if (::close(sockfd) < 0)
   {
     LOG_SYSERR << "sockets::close";
   }
+#endif // __linux__
+#ifdef WIN32
+  if (::winclosesock(sockfd) < 0)
+  {
+	  LOG_SYSERR << "sockets::close";
+  }
+#endif // WIN32
 }
 
 void sockets::shutdownWrite(int sockfd)

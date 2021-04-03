@@ -12,7 +12,11 @@
 #define MUDUO_NET_ENDIAN_H
 
 #include <stdint.h>
+#ifdef __linux__
 #include <endian.h>
+#endif // __linux__
+
+#include "muduo/base/CrossPlatformAdapterFunction.h"
 
 namespace muduo
 {

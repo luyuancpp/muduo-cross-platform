@@ -6,6 +6,7 @@
 #include "muduo/base/Condition.h"
 
 #include <errno.h>
+#ifdef __muduo_asynchronization__
 
 // returns true if time out, false otherwise.
 bool muduo::Condition::waitForSeconds(double seconds)
@@ -24,3 +25,4 @@ bool muduo::Condition::waitForSeconds(double seconds)
   return ETIMEDOUT == pthread_cond_timedwait(&pcond_, mutex_.getPthreadMutex(), &abstime);
 }
 
+#endif // __muduo_asynchronization__

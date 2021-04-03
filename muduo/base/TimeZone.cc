@@ -6,6 +6,7 @@
 #include "muduo/base/TimeZone.h"
 #include "muduo/base/noncopyable.h"
 #include "muduo/base/Date.h"
+#include "muduo/base/CrossPlatformAdapterFunction.h"
 
 #include <algorithm>
 #include <stdexcept>
@@ -14,7 +15,9 @@
 
 #include <assert.h>
 //#define _BSD_SOURCE
+#ifdef __linux__
 #include <endian.h>
+#endif // __linux__
 
 #include <stdint.h>
 #include <stdio.h>
@@ -121,11 +124,11 @@ class File : noncopyable
 
   string readBytes(int n)
   {
-    char buf[n];
-    ssize_t nr = ::fread(buf, 1, n, fp_);
+    std::vector<char> buf(n);
+    ssize_t nr = ::fread(buf.data(), 1, n, fp_);
     if (nr != n)
       throw logic_error("no enough data");
-    return string(buf, n);
+    return string(buf.data(), n);
   }
 
   int32_t readInt32()
@@ -289,8 +292,10 @@ struct tm TimeZone::toLocalTime(time_t seconds) const
     time_t localSeconds = seconds + local->gmtOffset;
     ::gmtime_r(&localSeconds, &localTime); // FIXME: fromUtcTime
     localTime.tm_isdst = local->isDst;
+#ifdef __linux__
     localTime.tm_gmtoff = local->gmtOffset;
     localTime.tm_zone = &data.abbreviation[local->arrbIdx];
+#endif // __linux__
   }
 
   return localTime;
@@ -323,7 +328,9 @@ struct tm TimeZone::toUtcTime(time_t secondsSinceEpoch, bool yday)
 {
   struct tm utc;
   memZero(&utc, sizeof(utc));
-  utc.tm_zone = "GMT";
+#ifdef __linux
+  utc.tm_zone = "GMT"
+#endif // __linux
   int seconds = static_cast<int>(secondsSinceEpoch % kSecondsPerDay);
   int days = static_cast<int>(secondsSinceEpoch / kSecondsPerDay);
   if (seconds < 0)

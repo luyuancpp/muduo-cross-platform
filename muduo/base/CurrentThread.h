@@ -7,6 +7,7 @@
 #define MUDUO_BASE_CURRENTTHREAD_H
 
 #include "muduo/base/Types.h"
+#include "muduo/base/CrossPlatformAdapterFunction.h"
 
 namespace muduo
 {

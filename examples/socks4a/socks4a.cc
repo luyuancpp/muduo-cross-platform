@@ -69,7 +69,7 @@ void onServerMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp)
             InetAddress tmp;
             if (InetAddress::resolve(hostname, &tmp))
             {
-              addr.sin_addr.s_addr = tmp.ipv4NetEndian();
+              addr.sin_addr.s_addr = tmp.ipNetEndian();
               okay = true;
             }
           }

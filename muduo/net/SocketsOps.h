@@ -11,8 +11,11 @@
 #ifndef MUDUO_NET_SOCKETSOPS_H
 #define MUDUO_NET_SOCKETSOPS_H
 
+#ifdef __linux__
 #include <arpa/inet.h>
+#endif // __linux__
 
+#include "muduo/base/CrossPlatformAdapterFunction.h"
 namespace muduo
 {
 namespace net

@@ -19,6 +19,7 @@
 
 #include <inttypes.h>
 
+#include "muduo/base/CrossPlatformAdapterFunction.h"
 
 using namespace muduo;
 using namespace muduo::detail;

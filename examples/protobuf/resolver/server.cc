@@ -5,7 +5,9 @@
 #include "muduo/net/protorpc/RpcServer.h"
 #include "examples/cdns/Resolver.h"
 
+#ifdef __linux__
 #include <unistd.h>
+#endif //__linux__
 
 using namespace muduo;
 using namespace muduo::net;
@@ -51,7 +53,7 @@ class ResolverServiceImpl : public ResolverService
 
   {
     LOG_INFO << "ResolverServiceImpl::doneCallback " << host;
-    int32_t ip = address.ipv4NetEndian();
+    int32_t ip = address.ipNetEndian();
     if (ip)
     {
       response->set_resolved(true);

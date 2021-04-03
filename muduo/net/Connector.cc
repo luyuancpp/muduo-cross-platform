@@ -16,6 +16,8 @@
 
 #include <errno.h>
 
+#include <algorithm>
+
 using namespace muduo;
 using namespace muduo::net;
 

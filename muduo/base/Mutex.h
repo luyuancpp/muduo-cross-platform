@@ -9,7 +9,10 @@
 #include "muduo/base/CurrentThread.h"
 #include "muduo/base/noncopyable.h"
 #include <assert.h>
+#ifdef __linux
 #include <pthread.h>
+#endif // __linux
+#include <mutex>
 
 // Thread safety annotations {
 // https://clang.llvm.org/docs/ThreadSafetyAnalysis.html
@@ -118,6 +121,7 @@ namespace muduo
 //   mutable MutexLock mutex_;
 //   std::vector<int> data_ GUARDED_BY(mutex_);
 // };
+#ifdef __muduo_asynchronization__
 class CAPABILITY("mutex") MutexLock : noncopyable
 {
  public:
@@ -222,6 +226,10 @@ class SCOPED_CAPABILITY MutexLockGuard : noncopyable
 
   MutexLock& mutex_;
 };
+#else
+typedef std::mutex MutexLock;
+typedef std::unique_lock<MutexLock> MutexLockGuard;
+#endif//__muduo_asynchronization__
 
 }  // namespace muduo
 

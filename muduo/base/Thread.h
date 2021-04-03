@@ -12,11 +12,14 @@
 
 #include <functional>
 #include <memory>
+#ifdef __linux__
 #include <pthread.h>
+#endif//__linux__
 
+#include <thread>
 namespace muduo
 {
-
+#ifdef __muduo_asynchronization__
 class Thread : noncopyable
 {
  public:
@@ -49,6 +52,35 @@ class Thread : noncopyable
 
   static AtomicInt32 numCreated_;
 };
+#else 
+class Thread : noncopyable
+{
+public:
+    typedef std::function<void()> ThreadFunc;
 
+    explicit Thread(ThreadFunc func, const string& name = string())
+        : func_(func),
+          name_(name)
+    {
+        numCreated_.incrementAndGet();
+    }
+    // FIXME: make it movable in C++11
+    ~Thread() {if (started())thread_.join();}
+
+    void start() { std::thread t(func_); thread_.swap(t); }
+    int join() { thread_.join(); return 1; }
+
+    bool started() const { return thread_.joinable(); }
+    const string& name() const { return name_; }
+
+    static int numCreated() { return numCreated_.get(); }
+
+private:
+    ThreadFunc func_;
+    string     name_;
+    static AtomicInt32 numCreated_;
+    std::thread thread_;
+};
+#endif//__muduo_asynchronization__
 }  // namespace muduo
 #endif  // MUDUO_BASE_THREAD_H

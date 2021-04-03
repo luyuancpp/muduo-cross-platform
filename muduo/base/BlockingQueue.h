@@ -21,7 +21,7 @@ class BlockingQueue : noncopyable
  public:
   BlockingQueue()
     : mutex_(),
-      notEmpty_(mutex_),
+      notEmpty_(),
       queue_()
   {
   }
@@ -47,7 +47,7 @@ class BlockingQueue : noncopyable
     // always use a while-loop, due to spurious wakeup
     while (queue_.empty())
     {
-      notEmpty_.wait();
+      notEmpty_.wait(lock);
     }
     assert(!queue_.empty());
     T front(std::move(queue_.front()));

@@ -11,6 +11,7 @@
 #include "muduo/base/StringPiece.h"
 #include "muduo/base/Types.h"
 #include "muduo/base/Timestamp.h"
+#include "muduo/base/CrossPlatformAdapterFunction.h"
 #include <vector>
 #include <sys/types.h>
 

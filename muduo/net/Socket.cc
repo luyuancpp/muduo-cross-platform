@@ -6,14 +6,17 @@
 
 // Author: Shuo Chen (chenshuo at chenshuo dot com)
 
+#include "muduo/base/CrossPlatformAdapterFunction.h"
 #include "muduo/net/Socket.h"
 
 #include "muduo/base/Logging.h"
 #include "muduo/net/InetAddress.h"
 #include "muduo/net/SocketsOps.h"
 
+#ifdef __linux__
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#endif //__linux__
 #include <stdio.h>  // snprintf
 
 using namespace muduo;

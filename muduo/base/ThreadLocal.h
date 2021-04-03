@@ -9,6 +9,7 @@
 #include "muduo/base/Mutex.h"
 #include "muduo/base/noncopyable.h"
 
+#ifdef __linux__
 #include <pthread.h>
 
 namespace muduo
@@ -56,4 +57,5 @@ class ThreadLocal : noncopyable
 
 }  // namespace muduo
 
+#endif//__linux__
 #endif  // MUDUO_BASE_THREADLOCAL_H

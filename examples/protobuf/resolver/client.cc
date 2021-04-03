@@ -6,11 +6,13 @@
 #include "muduo/net/TcpClient.h"
 #include "muduo/net/TcpConnection.h"
 #include "muduo/net/protorpc/RpcChannel.h"
-
+#ifdef __linux__
 #include <arpa/inet.h>  // inet_ntop
-
+#endif//__linux__
 #include <stdio.h>
+#ifdef __linux__
 #include <unistd.h>
+#endif//__linux__
 
 using namespace muduo;
 using namespace muduo::net;

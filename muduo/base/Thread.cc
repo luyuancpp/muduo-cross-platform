@@ -12,11 +12,13 @@
 
 #include <errno.h>
 #include <stdio.h>
+#ifdef __linux__
 #include <unistd.h>
 #include <sys/prctl.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
 #include <linux/unistd.h>
+#endif // __linux__
 
 namespace muduo
 {
@@ -25,7 +27,11 @@ namespace detail
 
 pid_t gettid()
 {
+#ifdef __linux__
   return static_cast<pid_t>(::syscall(SYS_gettid));
+#else
+    return ::GetCurrentThreadId();
+#endif // __linux__
 }
 
 void afterFork()
@@ -43,12 +49,15 @@ class ThreadNameInitializer
   {
     muduo::CurrentThread::t_threadName = "main";
     CurrentThread::tid();
+#ifdef __linux__
     pthread_atfork(NULL, NULL, &afterFork);
+#endif // __linux__
   }
 };
 
 ThreadNameInitializer init;
 
+#ifdef __muduo_asynchronization__
 struct ThreadData
 {
   typedef muduo::Thread::ThreadFunc ThreadFunc;
@@ -112,7 +121,7 @@ void* startThread(void* obj)
   delete data;
   return NULL;
 }
-
+#endif //__muduo_asynchronization__
 }  // namespace detail
 
 void CurrentThread::cacheTid()
@@ -138,7 +147,7 @@ void CurrentThread::sleepUsec(int64_t usec)
 }
 
 AtomicInt32 Thread::numCreated_;
-
+#ifdef __muduo_asynchronization__
 Thread::Thread(ThreadFunc func, const string& n)
   : started_(false),
     joined_(false),
@@ -196,5 +205,5 @@ int Thread::join()
   joined_ = true;
   return pthread_join(pthreadId_, NULL);
 }
-
+#endif//__muduo_asynchronization__
 }  // namespace muduo

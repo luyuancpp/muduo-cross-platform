@@ -4,8 +4,9 @@
 // Author: Shuo Chen (chenshuo at chenshuo dot com)
 
 #include "muduo/base/Timestamp.h"
-
+#ifdef  __linux__
 #include <sys/time.h>
+#endif //  __linux__
 #include <stdio.h>
 
 #ifndef __STDC_FORMAT_MACROS
@@ -14,6 +15,7 @@
 
 #include <inttypes.h>
 
+#include "muduo/base/CrossPlatformAdapterFunction.h"
 using namespace muduo;
 
 static_assert(sizeof(Timestamp) == sizeof(int64_t),

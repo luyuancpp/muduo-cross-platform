@@ -3,9 +3,9 @@
 #include "muduo/base/Logging.h"
 #include "muduo/net/EventLoop.h"
 #include "muduo/net/protorpc/RpcServer.h"
-
+#ifdef __linux__
 #include <unistd.h>
-
+#endif//__linux__
 using namespace muduo;
 using namespace muduo::net;
 

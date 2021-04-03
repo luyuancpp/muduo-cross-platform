@@ -70,16 +70,24 @@ class AppendFile : noncopyable
   void append(const char* logline, size_t len);
 
   void flush();
-
+#ifdef __linux__
   off_t writtenBytes() const { return writtenBytes_; }
-
+#endif // __linux__
+#ifdef WIN32
+  std::size_t writtenBytes() const { return writtenBytes_; }
+#endif // WIN32 
  private:
 
   size_t write(const char* logline, size_t len);
 
   FILE* fp_;
   char buffer_[64*1024];
+#ifdef __linux__
   off_t writtenBytes_;
+#endif // __linux__
+#ifdef WIN32
+  std::size_t writtenBytes_;
+#endif // WIN32 
 };
 
 }  // namespace FileUtil
