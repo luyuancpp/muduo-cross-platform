@@ -1,3 +1,4 @@
+syntax = "proto3";
 package muduo.net;
 
 option cc_generic_services = true;
@@ -18,21 +19,21 @@ message ListRpcRequest
 
 message ListRpcResponse
 {
-  required ErrorCode error = 1;
+  ErrorCode error = 1;
   repeated string service_name = 2;
   repeated string method_name = 3;
 }
 
 message GetServiceRequest
 {
-  required string service_name = 1;
+  string service_name = 1;
 }
 
 message GetServiceResponse
 {
-  required ErrorCode error = 1;
-  repeated string proto_file = 2;
-  repeated string proto_file_name = 3;
+  ErrorCode error = 1;
+  string proto_file = 2;
+  string proto_file_name = 3;
 }
 
 // the meta service

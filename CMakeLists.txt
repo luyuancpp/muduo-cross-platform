@@ -86,8 +86,9 @@ endif (MSVC)
 
 include_directories(boost)
 include_directories(gtest/googletest/include)
-include_directories(gtest/googlemock//include)
+include_directories(gtest/googlemock/include)
 include_directories(protobuf/src)
+include_directories(muduo/net/protorpc)
 include_directories(zlib)
 include_directories("${zlib_BINARY_DIR}")
 
