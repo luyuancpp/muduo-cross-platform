@@ -56,7 +56,7 @@
 #define TCP_INFO 0
 
 //type 
-#define ssize_t std::size_t
+typedef long long ssize_t;
 #define pid_t int32_t
 #undef off_t
 #define off_t std::size_t
