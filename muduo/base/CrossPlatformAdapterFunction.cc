@@ -12,6 +12,15 @@
 #include <muduo/base/Types.h>
 
 //////////////////////WIN32/////////////////////////////////
+#ifdef __linux__
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#include "ProcessInfo.h"
+#endif // __linux__
+
 #ifdef  WIN32
 
 void setbuffer(FILE *stream, char *buf, size_t size)
@@ -315,6 +324,7 @@ namespace muduo
                 return "unknownhost";
             }
         }
+
     }
 
 }//namespace muduo
@@ -323,3 +333,17 @@ namespace muduo
 #endif//WIN32
 
 
+namespace muduo
+{
+    namespace ProcessInfo
+    {
+        std::string localip()
+        {
+            auto host = hostname();
+            struct hostent* host_entry = gethostbyname(host.c_str());
+            return inet_ntoa(*((struct in_addr*)host_entry->h_addr));
+        }
+
+    }
+
+}//namespace muduo

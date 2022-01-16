@@ -74,7 +74,8 @@ typedef uint32_t in_addr_t;
 #define SHUT_RD SD_RECEIVE
 #define SHUT_WR SD_SEND
 #define SHUT_RDWR SD_BOTH
-#define SSIZE_MAX 2147483647L
+#undef  SSIZE_MAX
+#define SSIZE_MAX (LLONG_MAX >> 1)
 #define __MAX_ALLOCA_CUTOFF	65536
 #undef POLLRDHUP
 #define POLLRDHUP 0
@@ -308,7 +309,6 @@ namespace muduo
 {
     namespace ProcessInfo
     {
-
         std::string hostname();
     }
 
@@ -316,7 +316,14 @@ namespace muduo
 
 #endif//WIN32
 
+namespace muduo
+{
+    namespace ProcessInfo
+    {
+        std::string localip();
+    }
 
+}//namespace muduo
 
 
 #endif // !CROSSPLATFORM_ADAPTER_FUNCTION_H
