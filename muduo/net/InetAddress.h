@@ -15,9 +15,7 @@
 #include "muduo/base/StringPiece.h"
 #include "muduo/base/CrossPlatformAdapterFunction.h"
 
-#ifdef __linux__
 #include <netinet/in.h>
-#endif // __linux__
 
 namespace muduo
 {
