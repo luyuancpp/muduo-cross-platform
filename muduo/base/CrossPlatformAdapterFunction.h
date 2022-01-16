@@ -5,10 +5,8 @@
 
 #include <muduo/base/Types.h>
 
-
-
-#ifdef __linux__
 #include <sys/types.h>
+#ifdef __linux__
 #include <sys/time.h>
 #define auto_ptr unique_ptr
 #endif // __linux__

@@ -8,9 +8,7 @@
 #include "muduo/net/TcpServer.h"
 
 #include <stdio.h>
-#ifdef __linux__
 #include <unistd.h>
-#endif//__linux__
 
 using namespace muduo;
 using namespace muduo::net;

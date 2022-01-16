@@ -15,9 +15,7 @@
 
 #include <assert.h>
 //#define _BSD_SOURCE
-#ifdef __linux__
 #include <endian.h>
-#endif // __linux__
 
 #include <stdint.h>
 #include <stdio.h>

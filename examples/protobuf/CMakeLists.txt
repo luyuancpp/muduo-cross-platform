@@ -1,3 +1,4 @@
+include_directories(${PROJECT_SOURCE_DIR}/contrib/windows/include)
 add_subdirectory(codec)
 add_subdirectory(rpc)
 add_subdirectory(rpcbalancer)

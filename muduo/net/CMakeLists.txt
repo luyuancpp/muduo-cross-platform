@@ -26,7 +26,7 @@ set(net_SRCS
   Timer.cc
   TimerQueue.cc
   )
-
+include_directories(${PROJECT_SOURCE_DIR}/contrib/windows/include)
 add_library(muduo_net ${net_SRCS})
 target_link_libraries(muduo_net muduo_base)
 

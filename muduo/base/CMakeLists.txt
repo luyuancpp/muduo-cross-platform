@@ -15,7 +15,7 @@ set(base_SRCS
   CrossPlatformAdapterFunction.cc
   Thread.cc
   )
-
+include_directories(${PROJECT_SOURCE_DIR}/contrib/windows/include)
 add_library(muduo_base ${base_SRCS})
 
  target_link_libraries(muduo_base gtest)

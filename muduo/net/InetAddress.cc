@@ -12,10 +12,8 @@
 #include "muduo/net/Endian.h"
 #include "muduo/net/SocketsOps.h"
 
-#ifdef __linux__
 #include <netdb.h>
 #include <netinet/in.h>
-#endif // __linux__
 
 // INADDR_ANY use (type)value casting.
 #pragma GCC diagnostic ignored "-Wold-style-cast"
