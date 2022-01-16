@@ -16,7 +16,6 @@
 #include <unistd.h>
 #endif //__linux__
 
-#include "muduo/base/CrossPlatformAdapterFunction.h"
 using namespace muduo;
 
 FileUtil::AppendFile::AppendFile(StringArg filename)

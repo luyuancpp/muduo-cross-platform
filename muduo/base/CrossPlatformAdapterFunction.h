@@ -58,6 +58,7 @@
 //type 
 typedef long long ssize_t;
 #define pid_t int32_t
+#define _OFF_T_DEFINED
 #undef off_t
 #define off_t std::size_t
 #define sa_family_t int32_t
