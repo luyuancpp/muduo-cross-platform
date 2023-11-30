@@ -1,12 +1,13 @@
-#ifndef CROSSPLATFORM_ADAPTER_FUNCTION_H
-#define CROSSPLATFORM_ADAPTER_FUNCTION_H
+#pragma once
 
 #include <thread>
 
 #include <muduo/base/Types.h>
 
-#include <sys/types.h>
+
+
 #ifdef __linux__
+#include <sys/types.h>
 #include <sys/time.h>
 #define auto_ptr unique_ptr
 #endif // __linux__
@@ -56,9 +57,8 @@
 //type 
 typedef long long ssize_t;
 #define pid_t int32_t
-#define _OFF_T_DEFINED
 #undef off_t
-#define off_t std::size_t
+#define off_t uint64_t
 #define sa_family_t int32_t
 #define rlim_t uint64_t
 typedef uint64_t uid_t;
@@ -233,51 +233,51 @@ struct tcp_info {
     typedef uint32_t __u32;
     typedef uint64_t __u64;
     __u8	tcpi_state;		   //tcp state: TCP_SYN_SENT,TCP_SYN_RECV,TCP_FIN_WAIT1,TCP_CLOSE etc
-    __u8	tcpi_ca_state;     //congestion state£º
-    __u8	tcpi_retransmits;  //ÖØ´«Êı£¬±íÊ¾µ±Ç°´ıÖØ´«µÄ°üÊı£¬Õâ¸öÖµÔÚÖØ´«Íê±ÏºóÇåÁã
-    __u8	tcpi_probes;		///* ³ÖĞø¶¨Ê±Æ÷»ò±£»î¶¨Ê±Æ÷·¢ËÍÇÒÎ´È·ÈÏµÄ¶ÎÊı*/
-    __u8	tcpi_backoff;		//ÓÃÀ´¼ÆËã³ÖĞø¶¨Ê±Æ÷µÄÏÂÒ»¸öÉè¼ÆÖµµÄÖ¸ÊıÍË±ÜËã·¨Ö¸Êı£¬ÔÚ´«ËÍ³¬Ê±ÊÇ»áµİÔö¡£
-    __u8	tcpi_options;		//tcpÍ·²¿Ñ¡ÏîÊÇ·ñ°üº¬£ºÀ©Õ¹Òò×Ó¡¢Ê±¼ä´Á¡¢MSSµÈÄÚÈİ
-    __u8	tcpi_snd_wscale : 4, tcpi_rcv_wscale : 4; //À©Õ¹Òò×ÓÊıÖµ
-    __u8	tcpi_delivery_rate_app_limited : 1;  //ÏŞËÙ±êÖ¾
+    __u8	tcpi_ca_state;     //congestion stateï¼š
+    __u8	tcpi_retransmits;  //é‡ä¼ æ•°ï¼Œè¡¨ç¤ºå½“å‰å¾…é‡ä¼ çš„åŒ…æ•°ï¼Œè¿™ä¸ªå€¼åœ¨é‡ä¼ å®Œæ¯•åæ¸…é›¶
+    __u8	tcpi_probes;		///* æŒç»­å®šæ—¶å™¨æˆ–ä¿æ´»å®šæ—¶å™¨å‘é€ä¸”æœªç¡®è®¤çš„æ®µæ•°*/
+    __u8	tcpi_backoff;		//ç”¨æ¥è®¡ç®—æŒç»­å®šæ—¶å™¨çš„ä¸‹ä¸€ä¸ªè®¾è®¡å€¼çš„æŒ‡æ•°é€€é¿ç®—æ³•æŒ‡æ•°ï¼Œåœ¨ä¼ é€è¶…æ—¶æ˜¯ä¼šé€’å¢ã€‚
+    __u8	tcpi_options;		//tcpå¤´éƒ¨é€‰é¡¹æ˜¯å¦åŒ…å«ï¼šæ‰©å±•å› å­ã€æ—¶é—´æˆ³ã€MSSç­‰å†…å®¹
+    __u8	tcpi_snd_wscale : 4, tcpi_rcv_wscale : 4; //æ‰©å±•å› å­æ•°å€¼
+    __u8	tcpi_delivery_rate_app_limited : 1;  //é™é€Ÿæ ‡å¿—
 
-    __u32	tcpi_rto;		//ÖØ´«³¬Ê±Ê±¼ä£¬Õâ¸öºÍRTTÓĞ¹ØÏµ£¬RTTÔ½´ó£¬rtoÔ½´ó
-    __u32	tcpi_ato;		//ÓÃÀ´ÑÓÊ±È·ÈÏµÄ¹ÀÖµ£¬µ¥Î»ÎªÎ¢Ãë. 
-                            //ÔÚÊÕµ½TCP±¨ÎÄÊ±£¬»á¸ù¾İ±¾´ÎÓëÉÏ´Î½ÓÊÕµÄÊ±¼ä¼ä¸ôÀ´µ÷Õû¸ÄÖÆ£¬ÔÚÉèÖÃÑÓ³ÙÈ·ÈÏ¶¨Ê±Æ÷Ò²»á¸ù¾İ
-                            //Ìõ¼şĞŞ¸Ä¸ÃÖµ
-    __u32	tcpi_snd_mss;	// ±¾¶ËµÄMSS
-    __u32	tcpi_rcv_mss;	// ¶Ô¶ËµÄMSS
+    __u32	tcpi_rto;		//é‡ä¼ è¶…æ—¶æ—¶é—´ï¼Œè¿™ä¸ªå’ŒRTTæœ‰å…³ç³»ï¼ŒRTTè¶Šå¤§ï¼Œrtoè¶Šå¤§
+    __u32	tcpi_ato;		//ç”¨æ¥å»¶æ—¶ç¡®è®¤çš„ä¼°å€¼ï¼Œå•ä½ä¸ºå¾®ç§’. 
+                            //åœ¨æ”¶åˆ°TCPæŠ¥æ–‡æ—¶ï¼Œä¼šæ ¹æ®æœ¬æ¬¡ä¸ä¸Šæ¬¡æ¥æ”¶çš„æ—¶é—´é—´éš”æ¥è°ƒæ•´æ”¹åˆ¶ï¼Œåœ¨è®¾ç½®å»¶è¿Ÿç¡®è®¤å®šæ—¶å™¨ä¹Ÿä¼šæ ¹æ®
+                            //æ¡ä»¶ä¿®æ”¹è¯¥å€¼
+    __u32	tcpi_snd_mss;	// æœ¬ç«¯çš„MSS
+    __u32	tcpi_rcv_mss;	// å¯¹ç«¯çš„MSS
 
-    __u32	tcpi_unacked;	//Î´È·ÈÏµÄÊı¾İ¶ÎÊı
-    __u32	tcpi_sacked;    //2¸öº¬Òå£ºserver¶ËÔÚlisten½×¶Î£¬¿ÉÒÔ½ÓÊÕÁ¬½ÓµÄÊıÁ¿£»ÊÕµ½µÄSACK±¨ÎÄÊıÁ¿
-    __u32	tcpi_lost;		//±¾¶ËÔÚ·¢ËÍ³öÈ¥±»¶ªÊ§µÄ±¨ÎÄÊı¡£ÖØ´«Íê³ÉºóÇåÁã
-    __u32	tcpi_retrans;   /* ÖØ´«ÇÒÎ´È·ÈÏµÄÊı¾İ¶ÎÊı */
+    __u32	tcpi_unacked;	//æœªç¡®è®¤çš„æ•°æ®æ®µæ•°
+    __u32	tcpi_sacked;    //2ä¸ªå«ä¹‰ï¼šserverç«¯åœ¨listené˜¶æ®µï¼Œå¯ä»¥æ¥æ”¶è¿æ¥çš„æ•°é‡ï¼›æ”¶åˆ°çš„SACKæŠ¥æ–‡æ•°é‡
+    __u32	tcpi_lost;		//æœ¬ç«¯åœ¨å‘é€å‡ºå»è¢«ä¸¢å¤±çš„æŠ¥æ–‡æ•°ã€‚é‡ä¼ å®Œæˆåæ¸…é›¶
+    __u32	tcpi_retrans;   /* é‡ä¼ ä¸”æœªç¡®è®¤çš„æ•°æ®æ®µæ•° */
     __u32	tcpi_fackets;
 
     /* Times. */
-    __u32	tcpi_last_data_sent;	//µ±Ç°Ê±¼ä-×î½üÒ»¸ö°üµÄ·¢ËÍÊ±¼ä£¬µ¥Î»ÊÇºÁÃë
-    __u32	tcpi_last_ack_sent;     /* Î´Ê¹ÓÃ*/
-    __u32	tcpi_last_data_recv;	//µ±Ç°Ê±¼ä-×î½ü½ÓÊÕÊı¾İ°üµÄÊ±¼ä£¬µ¥Î»ÊÇºÁÃë
-    __u32	tcpi_last_ack_recv;     //µ±Ç°Ê±¼ä-×î½ü½ÓÊÕackµÄÊ±¼ä£¬µ¥Î»ÊÇºÁÃë
+    __u32	tcpi_last_data_sent;	//å½“å‰æ—¶é—´-æœ€è¿‘ä¸€ä¸ªåŒ…çš„å‘é€æ—¶é—´ï¼Œå•ä½æ˜¯æ¯«ç§’
+    __u32	tcpi_last_ack_sent;     /* æœªä½¿ç”¨*/
+    __u32	tcpi_last_data_recv;	//å½“å‰æ—¶é—´-æœ€è¿‘æ¥æ”¶æ•°æ®åŒ…çš„æ—¶é—´ï¼Œå•ä½æ˜¯æ¯«ç§’
+    __u32	tcpi_last_ack_recv;     //å½“å‰æ—¶é—´-æœ€è¿‘æ¥æ”¶ackçš„æ—¶é—´ï¼Œå•ä½æ˜¯æ¯«ç§’
 
     /* Metrics. */
-    __u32	tcpi_pmtu;			/* ×îºóÒ»´Î¸üĞÂµÄÂ·¾¶MTU */
-    __u32	tcpi_rcv_ssthresh;   //µ±Ç°½ÓÊÕ´°¿ÚµÄ´óĞ¡
-    __u32	tcpi_rtt;			//smoothed round trip time,Î¢Ãî	
-    __u32	tcpi_rttvar;		//ÃèÊöRTTµÄÆ½¾ùÆ«²î£¬¸ÃÖµÔ½´ó£¬ËµÃ÷RTT¶¶¶¯Ô½´ó
-    __u32	tcpi_snd_ssthresh;  //ÓµÈû¿ØÖÆÂı¿ªÊ¼ãĞÖµ
-    __u32	tcpi_snd_cwnd;		//ÓµÈû¿ØÖÆ´°¿Ú´óĞ¡
-    __u32	tcpi_advmss;		//±¾¶ËµÄMSSÉÏÏŞ
-    __u32	tcpi_reordering;	/* Ã»ÓĞ¶ª°üÊ±£¬¿ÉÒÔÖØĞÂÅÅĞòµÄÊı¾İ¶ÎÊı */
+    __u32	tcpi_pmtu;			/* æœ€åä¸€æ¬¡æ›´æ–°çš„è·¯å¾„MTU */
+    __u32	tcpi_rcv_ssthresh;   //å½“å‰æ¥æ”¶çª—å£çš„å¤§å°
+    __u32	tcpi_rtt;			//smoothed round trip time,å¾®å¦™	
+    __u32	tcpi_rttvar;		//æè¿°RTTçš„å¹³å‡åå·®ï¼Œè¯¥å€¼è¶Šå¤§ï¼Œè¯´æ˜RTTæŠ–åŠ¨è¶Šå¤§
+    __u32	tcpi_snd_ssthresh;  //æ‹¥å¡æ§åˆ¶æ…¢å¼€å§‹é˜ˆå€¼
+    __u32	tcpi_snd_cwnd;		//æ‹¥å¡æ§åˆ¶çª—å£å¤§å°
+    __u32	tcpi_advmss;		//æœ¬ç«¯çš„MSSä¸Šé™
+    __u32	tcpi_reordering;	/* æ²¡æœ‰ä¸¢åŒ…æ—¶ï¼Œå¯ä»¥é‡æ–°æ’åºçš„æ•°æ®æ®µæ•° */
 
-    __u32	tcpi_rcv_rtt;		// ×÷Îª½ÓÊÕ¶Ë£¬²â³öµÄRTTÖµ£¬µ¥Î»ÎªÎ¢Ãë. Õâ¸öÖµ²»ÊÇ¶Ô·½¼ÆËã²¢´«ËÍ¹ıÀ´µÄrtt£¬¶øÊÇ×÷Îª½ÓÊÕ¶Ë£¬ÔÚÃ»·¢ËÍÊı¾İµÄÇé¿öÏÂ
-                                // Í¨¹ı½ÓÊÕ·¢ËÍ¶Ë·¢ËÍµÄÊı¾İµÄÇé¿ö¼ÆËãµÃµ½µÄrttÖµ¡£ÔÚÊı¾İ·¢ËÍ·½£¬Èç¹û²»½ÓÊÜÊı¾İ£¬Õâ¸öÖµÒ»°ãÇé¿öÏÂÎª0¡£
-    __u32	tcpi_rcv_space;		/* µ±Ç°½ÓÊÕ»º´æµÄ´óĞ¡ */
+    __u32	tcpi_rcv_rtt;		// ä½œä¸ºæ¥æ”¶ç«¯ï¼Œæµ‹å‡ºçš„RTTå€¼ï¼Œå•ä½ä¸ºå¾®ç§’. è¿™ä¸ªå€¼ä¸æ˜¯å¯¹æ–¹è®¡ç®—å¹¶ä¼ é€è¿‡æ¥çš„rttï¼Œè€Œæ˜¯ä½œä¸ºæ¥æ”¶ç«¯ï¼Œåœ¨æ²¡å‘é€æ•°æ®çš„æƒ…å†µä¸‹
+                                // é€šè¿‡æ¥æ”¶å‘é€ç«¯å‘é€çš„æ•°æ®çš„æƒ…å†µè®¡ç®—å¾—åˆ°çš„rttå€¼ã€‚åœ¨æ•°æ®å‘é€æ–¹ï¼Œå¦‚æœä¸æ¥å—æ•°æ®ï¼Œè¿™ä¸ªå€¼ä¸€èˆ¬æƒ…å†µä¸‹ä¸º0ã€‚
+    __u32	tcpi_rcv_space;		/* å½“å‰æ¥æ”¶ç¼“å­˜çš„å¤§å° */
 
-    __u32	tcpi_total_retrans;  //Í³¼Æ×ÜÖØ´«µÄ°üÊı£¬³ÖĞøÔö³¤¡£
+    __u32	tcpi_total_retrans;  //ç»Ÿè®¡æ€»é‡ä¼ çš„åŒ…æ•°ï¼ŒæŒç»­å¢é•¿ã€‚
 
-    __u64	tcpi_pacing_rate;		//·¢ËÍËÙÂÊ
-    __u64	tcpi_max_pacing_rate;	//×î´ó·¢ËÍËÙÂÊ£¬Ä¬ÈÏÊÇunlimited£¬¿ÉÒÔÍ¨¹ıSO_MAX_PACING_RATEÀ´ÉèÖÃ
+    __u64	tcpi_pacing_rate;		//å‘é€é€Ÿç‡
+    __u64	tcpi_max_pacing_rate;	//æœ€å¤§å‘é€é€Ÿç‡ï¼Œé»˜è®¤æ˜¯unlimitedï¼Œå¯ä»¥é€šè¿‡SO_MAX_PACING_RATEæ¥è®¾ç½®
     __u64	tcpi_bytes_acked;    /* RFC4898 tcpEStatsAppHCThruOctetsAcked */
     __u64	tcpi_bytes_received; /* RFC4898 tcpEStatsAppHCThruOctetsReceived */
     __u32	tcpi_segs_out;	     /* RFC4898 tcpEStatsPerfSegsOut */
@@ -324,7 +324,5 @@ namespace muduo
 
 }//namespace muduo
 
-
-#endif // !CROSSPLATFORM_ADAPTER_FUNCTION_H
 
 	
