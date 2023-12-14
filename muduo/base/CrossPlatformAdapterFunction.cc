@@ -343,7 +343,6 @@ namespace muduo
             struct hostent* host_entry = gethostbyname(host.c_str());
             return inet_ntoa(*((struct in_addr*)host_entry->h_addr));
         }
-
     }
 
 }//namespace muduo
