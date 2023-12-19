@@ -13,6 +13,7 @@
 #include "muduo/net/Channel.h"
 
 #include <assert.h>
+#include <algorithm>
 #include <errno.h>
 #ifdef __linux__
 #include <poll.h>
