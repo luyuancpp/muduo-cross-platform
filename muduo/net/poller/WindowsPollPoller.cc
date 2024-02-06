@@ -18,6 +18,8 @@
 #include <poll.h>
 #endif //__linux__
 
+#include <algorithm>
+
 using namespace muduo;
 using namespace muduo::net;
 
