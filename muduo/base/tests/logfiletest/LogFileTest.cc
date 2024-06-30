@@ -23,8 +23,6 @@ void flushFunc()
 
 TEST(LogFileTest, MultipleThread)
 {
-	
-	
 	g_logFile.reset(new muduo::LogFile("test", 200 * 1000));
 	muduo::Logger::setOutput(outputFunc);
 	muduo::Logger::setFlush(flushFunc);
@@ -42,7 +40,6 @@ TEST(LogFileTest, MultipleThread)
 
 int main(int argc, char **argv)
 {
-
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }

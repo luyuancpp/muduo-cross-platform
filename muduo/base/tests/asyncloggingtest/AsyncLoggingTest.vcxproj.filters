@@ -54,5 +54,8 @@
     <ClCompile Include="..\..\Date.cc">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Thread.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
