@@ -9,8 +9,6 @@
 #include <sys/resource.h>
 #endif // __linux__
 
-
-
 off_t kRollSize = 500 * 1000 * 1000;
 
 muduo::AsyncLogging* g_asyncLog = NULL;
