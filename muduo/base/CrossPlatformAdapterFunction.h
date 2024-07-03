@@ -129,6 +129,10 @@ int gethostbyname_r(const char *name,
 	struct hostent *ret, char *buf, size_t buflen,
 	struct hostent **result, int *h_errnop);
 
+char* strptime(const char* s,
+    const char* f,
+    struct tm* tm);
+
 /* Swap bytes in 16 bit value.  */
 #define __bswap_constant_16(x) \
 	((unsigned short int)((((x) >> 8) & 0xffu) | (((x) & 0xffu) << 8)))

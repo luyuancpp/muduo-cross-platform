@@ -26,10 +26,7 @@ struct tm getTm(int year, int month, int day,
 struct tm getTm(const char* str)
 {
 	struct tm gmt = {};
-#ifdef __linux__
 	strptime(str, "%F %T", &gmt);
-#endif // __linux__
-
 	return gmt;
 }
 
@@ -87,7 +84,7 @@ void test(const TimeZone& tz, TestCase tc)
 
 void testNewYork()
 {
-	TimeZone tz("/usr/share/zoneinfo/America/New_York");
+	TimeZone tz("./New_York");
 	TestCase cases[] =
 	{
 
