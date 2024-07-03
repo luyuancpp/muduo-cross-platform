@@ -84,7 +84,7 @@ void test(const TimeZone& tz, TestCase tc)
 
 void testNewYork()
 {
-	TimeZone tz("./New_York");
+	TimeZone tz("/usr/share/zoneinfo/America/New_York");
 	TestCase cases[] =
 	{
 
