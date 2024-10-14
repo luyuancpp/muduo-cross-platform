@@ -174,7 +174,12 @@ int sockets::accept(int sockfd, struct sockaddr_in6* addr)
 
 int sockets::connect(int sockfd, const struct sockaddr* addr)
 {
+#ifdef __linux__
   return ::connect(sockfd, addr, static_cast<socklen_t>(sizeof(struct sockaddr_in6)));
+#endif
+#ifdef WIN32
+  return ::win_connect(sockfd, addr);
+#endif // WIN32
 }
 
 ssize_t sockets::read(int sockfd, void *buf, size_t count)

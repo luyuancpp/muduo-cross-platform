@@ -317,7 +317,12 @@ namespace muduo
 
 }//namespace muduo
 
+int32_t win_connect(int sockfd, const struct sockaddr* addr
+);
+
 #endif//WIN32
+
+void win_clear();
 
 namespace muduo
 {
@@ -327,6 +332,7 @@ namespace muduo
     }
 
 }//namespace muduo
+
 
 
 	

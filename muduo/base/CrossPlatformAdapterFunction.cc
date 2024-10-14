@@ -1,4 +1,4 @@
-
+﻿
 #include <muduo/base/CrossPlatformAdapterFunction.h>
 
 #include <algorithm>
@@ -22,6 +22,8 @@
 #endif // __linux__
 
 #ifdef  WIN32
+
+#include "Logging.h"
 
 void setbuffer(FILE *stream, char *buf, size_t size)
 {
@@ -298,6 +300,40 @@ int accept4(int sockfd, struct sockaddr *addr,
     u_long  mode = 0;
     ioctlsocket(connfd, FIONBIO, &mode);
     return connfd;
+}
+
+int32_t win_connect(int sockfd, const struct sockaddr* addr)
+{
+    auto result = ::connect(sockfd, addr, static_cast<socklen_t>(sizeof(struct sockaddr_in6)));
+    if (result == SOCKET_ERROR) {
+        int error_code = WSAGetLastError();
+        if (error_code == WSAEWOULDBLOCK) {
+            LOG_INFO << "Connect is in progress (WSAEWOULDBLOCK). Waiting for completion..." ;
+
+            // 使用 select 等待套接字可写
+            fd_set writefds;
+            FD_ZERO(&writefds);
+            FD_SET(sockfd, &writefds);
+
+            timeval timeout;
+            timeout.tv_sec = 5;  // 等待 5 秒
+            timeout.tv_usec = 0;
+
+            result = select(0, nullptr, &writefds, nullptr, &timeout);
+            if (result > 0 && FD_ISSET(sockfd, &writefds)) {
+                LOG_INFO << "Connection established!" ;
+            }
+            else if (result == 0) {
+                LOG_INFO << "Connection timed out.";
+            }
+            else {
+                LOG_ERROR << "Select failed with error: " << WSAGetLastError() ;
+            }
+            return 0;
+        }
+    }
+
+    return result;
 }
 
 #pragma region strptime
@@ -1144,4 +1180,11 @@ find_string(const unsigned char* bp, int* tgt, const char* const* n1,
 
 #endif//WIN32
 
+
+void win_clear()
+{
+#ifdef WIN32
+    WSACleanup();
+#endif // WIN32
+}
 
